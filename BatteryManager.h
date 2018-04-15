@@ -1,9 +1,10 @@
 #ifndef BATTERYMANAGER_H
 #define BATTERYMANAGER_H
-
+#include <stdint.h>
+#include "BaseModule.h"
 // BatteryManager class
 // Battery monitoring and operation availability calculations
-class BatteryManager {
+class BatteryManager : public BaseModule{
 public:
     BatteryManager();
     BatteryManager(const BatteryManager& orig);
