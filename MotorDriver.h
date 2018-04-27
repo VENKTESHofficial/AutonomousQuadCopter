@@ -2,6 +2,7 @@
 #define MOTORDRIVER_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "PID.h"
 // MotorDriver class
 // Drives electric speed controller, that belongs to electric motor
 // Uses PWM method(conversion is defined)
@@ -14,13 +15,17 @@ public:
     
     void* ReceiveData();
     uint8_t TransmitData();
-    void* ReceiveData(uint8_t data_id);
-    uint8_t TransmitData(uint8_t data_id);
+    template <uint8_t k>
+    void* ReceiveData();
+    template <uint8_t k>
+    uint8_t TransmitData(void* param_data);
     
-    uint8_t GetFeedBack();
+    uint8_t GetFeedback();
     uint8_t SendFeedback();
-    uint8_t GetFeedback(uint8_t data_id);
-    uint8_t SendFeedback(uint8_t data_id);
+    template <uint8_t k>
+    uint8_t GetFeedback();
+    template <uint8_t k>
+    uint8_t SendFeedback(void* param_data);
     
     
     static bool calibration_mode_;
@@ -43,17 +48,7 @@ private:
     
 };
 
-class PID{
-public:
-    
-private:
-    double target_;
-    double p_;
-    double i_;
-    double d_;
-    double lower_boundary_val_;
-    double upper_boundary_val_;
-};
+
 
 #endif /* MOTORDRIVER_H */
 

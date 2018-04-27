@@ -7,18 +7,23 @@
 class BatteryManager : public BaseModule{
 public:
     BatteryManager();
+    
     BatteryManager(const BatteryManager& orig);
     virtual ~BatteryManager();
     
     void* ReceiveData();
     uint8_t TransmitData();
-    void* ReceiveData(uint8_t data_id);
-    uint8_t TransmitData(uint8_t data_id);
+    template <uint8_t k>
+    void* ReceiveData();
+    template <uint8_t k>
+    uint8_t TransmitData(void* param_data);
     
-    uint8_t GetFeedBack();
+    uint8_t GetFeedback();
     uint8_t SendFeedback();
-    uint8_t GetFeedback(uint8_t data_id);
-    uint8_t SendFeedback(uint8_t data_id);
+    template <uint8_t k>
+    uint8_t GetFeedback();
+    template <uint8_t k>
+    uint8_t SendFeedback(void* param_data);
 private:
 
 };
