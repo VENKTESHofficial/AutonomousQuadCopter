@@ -5,26 +5,32 @@
 // SerialDriver class
 // Inherited from CommunicationDriver
 // Specializes the operation process of serial communication
-class SerialDriver : public BaseModule{
+class SerialDriver : public CommunicationDriver{
 public:
     SerialDriver();
-    SerialDriver(char* port);
+    SerialDriver(char* comm_port, long comm_timeout, uint8_t comm_est_limit,
+        BaseModule** module_dependencies);
     SerialDriver(const SerialDriver& orig);
-    
     virtual ~SerialDriver();
-    
     
     void* ReceiveData();
     uint8_t TransmitData();
-    void* ReceiveData(uint8_t data_id);
-    uint8_t TransmitData(uint8_t data_id);
+    template <uint8_t k>
+    void* ReceiveData();
+    template <uint8_t k>
+    uint8_t TransmitData(void* param_data);
     
-    uint8_t GetFeedBack();
+    uint8_t GetFeedback();
     uint8_t SendFeedback();
-    uint8_t GetFeedback(uint8_t data_id);
-    uint8_t SendFeedback(uint8_t data_id);
+    template <uint8_t k>
+    uint8_t GetFeedback();
+    template <uint8_t k>
+    uint8_t SendFeedback(void* param_data);
+    
+    uint8_t SendRemoteData();
+    uint8_t GetRemoteData();
 private:
-    char* port_;
+    uint8_t comm_port_;
 };
 
 #endif /* SERIALDRIVER_H */

@@ -30,14 +30,18 @@ public:
     int8_t InitVehicle();
     
     void* ReceiveData();
-    int8_t TransmitData();
-    void* ReceiveData(uint8_t data_id);
-    int8_t TransmitData(uint8_t data_id);
+    uint8_t TransmitData();
+    template <uint8_t k>
+    void* ReceiveData();
+    template <uint8_t k>
+    uint8_t TransmitData(void* param_data);
     
-    int8_t GetFeedBack();
-    int8_t SendFeedback();
-    int8_t GetFeedback(uint8_t data_id);
-    int8_t SendFeedback(uint8_t data_id);
+    uint8_t GetFeedback();
+    uint8_t SendFeedback();
+    template <uint8_t k>
+    uint8_t GetFeedback();
+    template <uint8_t k>
+    uint8_t SendFeedback(void* param_data);
     
     
     int8_t setCurrentErrorStatus(int8_t error_id);
@@ -45,20 +49,6 @@ public:
     
 private:
     // hardware communication pin layout
-    
-    /*uint8_t voltage_meter_0_;
-    uint8_t voltage_meter_1_;
-    uint8_t voltage_meter_2_;
-    uint8_t motor_ESC_0_;
-    uint8_t motor_ESC_1_;
-    uint8_t motor_ESC_2_;
-    uint8_t motor_ESC_3_;
-    uint8_t central_IMU_sensor_;
-    uint8_t env_temp_hum_sensor_;
-    uint8_t distance_sensor_0_;
-    uint8_t distance_sensor_1_;
-    uint8_t distance_sensor_2_;
-    uint8_t distance_sensor_3_;*/
     
     char* log_file_name_;
     uint8_t beep_speaker_port_;
@@ -110,19 +100,13 @@ private:
     TCPDriver** vehicle_group_;
     
     
-    
-    
-    
-    
-    
-    
-    
     // timing control and operation synchronization
     long elapsed_operation_time_;
     
     
     // task section
     Command** operation_tasks_;
+    
     
     // error management
     int8_t current_error_status_;
@@ -185,19 +169,23 @@ struct VehicleParameter{
     char* metric_point_area_comm_address_;
     uint32_t metric_point_area_comm_port_;
     long metric_point_area_comm_timeout_;
-    Vector<double>* external_forces_;
-    Vector<double>* internal_forces_;
-    bool discretization_sampling_mode_;// time or equidistance-based
-    long actuator_time_sampling_rate_;
-    uint64_t actuator_dist_sampling_rate_;
     
-    Vector<double> metric_position_upper_bounds_;
-    Vector<double> metric_position_lower_bounds_;
-    Vector<double> metric_speed_upper_bounds_;
-    Vector<double> metric_speed_lower_bounds_;
-    Vector<double> metric_accel_upper_bounds_;
-    Vector<double> metric_accel_lower_bounds_;
-    Vector<double>* positional_trajectory_execution_error_bounds_;// x, y, z
+    struct TrajectoryParams{
+        Vector<double>* external_forces_;
+        Vector<double>* internal_forces_;
+        bool discretization_sampling_mode_;// time or equidistance-based
+        long actuator_time_sampling_rate_;
+        uint64_t actuator_dist_sampling_rate_;
+        Vector<double> metric_position_upper_bounds_;
+        Vector<double> metric_position_lower_bounds_;
+        Vector<double> metric_speed_upper_bounds_;
+        Vector<double> metric_speed_lower_bounds_;
+        Vector<double> metric_accel_upper_bounds_;
+        Vector<double> metric_accel_lower_bounds_;
+        // positional_trajectory_execution_error_bounds_
+        Vector<double>* pos_traj_exec_err_bounds_;// x, y, z
+    }trajectory_params_;
+    
         
     char* user_realtime_control_comm_address_;
     long user_realtime_control_comm_timeout_;
