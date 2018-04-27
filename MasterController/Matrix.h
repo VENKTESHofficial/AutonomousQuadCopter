@@ -8,6 +8,7 @@ public:
     Matrix();
     Matrix(const Matrix& orig);
     virtual ~Matrix();
+    
 private:
 
 };
