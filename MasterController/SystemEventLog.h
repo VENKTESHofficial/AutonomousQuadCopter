@@ -10,22 +10,17 @@ public:
     SystemEventLog(const SystemEventLog& orig);
     virtual ~SystemEventLog();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+private:
     
     void WriteMsg(char* msg);
-private:
+    
     char* log_file_name_;
     int32_t file_descriptor_;
     char* last_msg_;
