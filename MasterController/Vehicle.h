@@ -11,7 +11,7 @@
 #include "BeepSpeaker.h"
 #include "SerialDriver.h"
 #include "BatteryManager.h"
-#include "MotorDriver.h"
+#include "ActuatorDriver.h"
 #include "InertialMeasurementUnit.h"
 #include "EnvironmentalSensor.h"
 #include "DistanceSensor.h"
@@ -96,8 +96,8 @@ private:
     SerialDriver* sensor_controller_comm_;
     SerialDriver* actuator_controller_comm_;
     BatteryManager* battery_0_manager_;
-    uint8_t num_of_motor_drivers_;
-    MotorDriver** motor_drivers_;
+    uint8_t num_of_actuator_drivers_;
+    ActuatorDriver** actuator_drivers_;
     InertialMeasurementUnit* central_IMU_sensor_;
     EnvironmentalSensor* env_temp_hum_sensor_;
     uint8_t num_of_distance_sensors_;
@@ -165,11 +165,30 @@ struct VehicleParameter{
     double battery_warning_lvl_;
     double battery_critical_lvl_;
     
-    uint8_t num_of_motor_drivers_;
-    uint8_t* motor_driver_ports_;
+    uint8_t num_of_actuator_drivers_;
+    uint8_t* actuator_driver_ports_;
     double* pid_control_section_lower_bounds_;
     double* pid_control_section_upper_bounds_;
-    
+    struct ActuatorParams{
+        uint8_t* esc_comm_pins_;
+        uint64_t calibration_delay_;
+        uint64_t pwm_signal_frequency_;
+        uint64_t lower_pulse_bound_;
+        uint64_t upper_pulse_bound_;
+        double offset_pwm_deg_;
+        double max_BEC_output_;
+         double bearing_efficiency_;
+        double max_torque_;
+        uint64_t spin_up_of_unit_deg_inc_;
+        uint64_t motor_kv_rate_;
+        double blade_mass_;
+        double blade_length_;
+        double blade_width_;
+        double blade_efficiency_;
+        double max_thrust_;
+        double max_consumption_;
+    }actuator_params_;
+        
     uint8_t* central_IMU_sensor_ports_;
     long central_IMU_sensor_samling_rate_;
     Vector<double> central_IMU_sensor_position_offset_;

@@ -41,15 +41,12 @@ Vehicle::Vehicle(VehicleParameter v_params) {
         v_params.battery_critical_lvl_);
     error_manager_container_.push_back(battery_0_manager_);
     
-    num_of_motor_drivers_ = v_params.num_of_motor_drivers_;
-    motor_drivers_ =
-        (MotorDriver*)malloc(sizeof(MotorDriver*) * num_of_motor_drivers_);
-    for(uint8_t i = 0; i < num_of_motor_drivers_; ++i){
-        motor_drivers_[i] = new MotorDriver(
-            v_params.motor_driver_ports_[i],
-            v_params.pid_control_section_lower_bounds_,
-            v_params.pid_control_section_upper_bounds_);
-        error_manager_container_.push_back(motor_drivers_[i]);
+    num_of_actuator_drivers_ = v_params.num_of_actuator_drivers_;
+    actuator_drivers_ =
+        (ActuatorDriver*)malloc(sizeof(ActuatorDriver*) * num_of_actuator_drivers_);
+    for(uint8_t i = 0; i < num_of_actuator_drivers_; ++i){
+        actuator_drivers_[i] = new ActuatorDriver(i , v_params.actuator_params_);
+        error_manager_container_.push_back(actuator_drivers_[i]);
     }
     
     central_IMU_sensor_ = new InertialMeasurementUnit(
@@ -252,7 +249,7 @@ void inline Vehicle::Run<21>(){
 void inline Vehicle::Run<22>(){
     Vector<void*>* param_data;
     if(current_error_status_ = param_data
-        ->PushBack((void*)mechancial_model_->TransmitData<1>()))
+        ->PushBack((void*)mechanical_model_->TransmitData<1>()))
         this->Run<23>((void*)param_data);
 }
 
@@ -298,15 +295,15 @@ void inline Vehicle::Run<28>(){
 }
 
 void inline Vehicle::Run<29>(uint8_t i){
-    if(current_error_status_ = motor_drivers_[i]
+    if(current_error_status_ = actuator_drivers_[i]
                     ->ReceiveData<1>((void*)(mechanical_model_->TransmitData<5>())))
         this->Run<30>(i);
 }
 
 void inline Vehicle::Run<30>(uint8_t i){
     if(current_error_status_ = actuator_controller_comm_
-        ->ReceiveData<1>((void*)(motor_drivers_[i]->TransmitData<1>()))){
-        if(i < num_of_motor_drivers_)
+        ->ReceiveData<1>((void*)(actuator_drivers_[i]->TransmitData<1>()))){
+        if(i < num_of_actuator_drivers_)
             this->Run<29>(++i);
         else
             this->Run<5>();
