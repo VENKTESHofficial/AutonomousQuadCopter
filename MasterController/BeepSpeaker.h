@@ -3,28 +3,24 @@
 #include <stdint.h>
 #include <string.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // BeepSpeaker class
 // audio feedback for vehicle operation status
-class BeepSpeaker : public BaseModule{
+class BeepSpeaker : public BaseModule, DriverBase{
 public:
     BeepSpeaker();
     BeepSpeaker(uint8_t port, BaseModule** module_dependencies);
     BeepSpeaker(const BeepSpeaker& orig);
     virtual ~BeepSpeaker();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    bool InitComponent();
 private:
     uint8_t port_;
     char** status_sound_patterns_;

@@ -2,29 +2,25 @@
 #define INERTIALMEASUREMENTUNIT_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // IntertialMeasurementUnit class
 // IMU sensor driver unit
 // Manages axial accelerations and angular accelerations
 // Updates position, speed, acceleration vectors
-class InertialMeasurementUnit : public BaseModule{
+class InertialMeasurementUnit : public BaseModule, DriverBase{
 public:
     InertialMeasurementUnit();
     InertialMeasurementUnit(const InertialMeasurementUnit& orig);
     virtual ~InertialMeasurementUnit();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    bool InitComponent();
 private:
     uint8_t* imu_comm_pins_;
     double offset_sensor_displacement_x_;

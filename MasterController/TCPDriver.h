@@ -2,10 +2,11 @@
 #define TCPDRIVER_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // TCPDriver class
 // Inherited from CommunicationDriver
 // Specializes the TCP communication process
-class TCPDriver : public CommunicationDriver{
+class TCPDriver : public CommunicationDriver, DriverBase{
 public:
     TCPDriver();
     TCPDriver(char* comm_address, uint8_t comm_port, long comm_timeout,
@@ -13,19 +14,13 @@ public:
     TCPDriver(const TCPDriver& orig);
     virtual ~TCPDriver();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
-    
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    void* TransmitData();
+    bool InitComponent();
     
     uint8_t SendRemoteData();
     uint8_t GetRemoteData();

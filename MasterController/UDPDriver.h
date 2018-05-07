@@ -2,10 +2,11 @@
 #define UDPDRIVER_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // UDPDriver class
 // Inherited from CommunicationDriver
 // Specializes the UDP communication process
-class UDPDriver : public CommunicationDriver{
+class UDPDriver : public CommunicationDriver, DriverBase{
 public:
     UDPDriver();
     UDPDriver(char* comm_address, uint8_t comm_port, long comm_timeout,
@@ -13,19 +14,14 @@ public:
     UDPDriver(const UDPDriver& orig);
     virtual ~UDPDriver();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    bool InitComponent();
     
     uint8_t SendRemoteData();
     uint8_t GetRemoteData();

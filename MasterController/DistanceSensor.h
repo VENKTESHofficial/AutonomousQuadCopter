@@ -2,29 +2,46 @@
 #define DISTANCESENSOR_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // DistanceSensor class
 // Distance measurement sensor driver class
 // Generalized operation(laser, ultrasonic, etc..)
-class DistanceSensor : public BaseModule{
+class DistanceSensor : public BaseModule, DriverBase{
 public:
     DistanceSensor();
     DistanceSensor(const DistanceSensor& orig);
     virtual ~DistanceSensor();
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    bool InitComponent();
+    
+    bool SignalConditioner();
+    
+    uint8_t* GetDistanceSensorCommPins();
+    uint64_t GetAbsoroptionWeeknessTimeout();
+    double GetLowerPulseBounds();
+    double GetUpperPulseBound();
+    uint64_t GetSamplingRate();
+    uint8_t GetErrotNumberThreshold();
+    double GetRelativeRadarXPos();
+    double GetRelativeRadarYPos();
+    double GetRelatieRadarZPos();
+    
+    struct BoundaryIntExclusion{
+        bool operator();
+    }bound_int_excl_;
 private:
+    // correction of crystal oscillator sampling rate fluctuation
+    double crystal_oscillation_correction_;
+    // this is according to local temperature value of environmental sensor
+    // -> live correction
+    
     uint8_t* distance_sensor_comm_pins_;
     uint64_t absorption_weekness_timout_;
     double lower_pulse_bound_;
@@ -34,6 +51,8 @@ private:
     double relative_radar_x_pos_;
     double relative_radar_y_pos_;
     double relative_radar_z_pos_;
+    
+    
     
 };
 
