@@ -2,9 +2,10 @@
 #define ENVIRONMENTALSENSOR_H
 #include <stdint.h>
 #include "BaseModule.h"
+#include "DriverBase.h"
 // EnvironmentalSensor class
 // Temperature, pressure, humidity, hygrometer sensor manager
-class EnvironmentalSensor : public BaseModule{
+class EnvironmentalSensor : public BaseModule, DriverBase{
 public:
     EnvironmentalSensor();
     EnvironmentalSensor(BaseModule** module_dependencies);
@@ -12,19 +13,14 @@ public:
     virtual ~EnvironmentalSensor();
     
     
-    void* ReceiveData();
-    uint8_t TransmitData();
+    uint8_t ReceiveData();
+    void* TransmitData();
     template <uint8_t k>
-    void* ReceiveData();
+    uint8_t ReceiveData(void* param_data);
     template <uint8_t k>
-    uint8_t TransmitData(void* param_data);
+    void* TransmitData();
     
-    uint8_t GetFeedback();
-    uint8_t SendFeedback();
-    template <uint8_t k>
-    uint8_t GetFeedback();
-    template <uint8_t k>
-    uint8_t SendFeedback(void* param_data);
+    bool InitComponent();
 private:
 
 };

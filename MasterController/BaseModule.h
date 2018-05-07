@@ -16,6 +16,7 @@
 //  SendFeedback()
 //
 
+// master-slave role layout
 class BaseModule {
 public:
     BaseModule();
@@ -25,22 +26,21 @@ public:
     virtual ~BaseModule();
     // Class interface
     // data transaction function
-    virtual void* ReceiveData() = 0;
-    virtual uint8_t TransmitData() = 0;
+    virtual uint8_t ReceiveData() = 0;
+    virtual void* TransmitData() = 0;
     template <uint8_t k>
-    virtual void* ReceiveData() = 0;
+    virtual uint8_t ReceiveData(void* param_data) = 0;
     template <uint8_t k>
-    virtual uint8_t TransmitData(void* param_data) = 0;
+    virtual void* TransmitData() = 0;
+        
+    int8_t GetModuleStatus();
+    uint8_t GetNumOfModuleStatuses();
+    static uint8_t GetDynamicPriorityValue();
+    uint8_t GetModulePriorityValue();
+    uint8_t* GetPriorityOrder();
+    BaseModule** GetModuleDependencies();
     
-    // feedback transaction functions
-    virtual int8_t GetFeedback() = 0;
-    virtual int8_t SendFeedback() = 0;
-    template <uint8_t k>
-    virtual int8_t GetFeedback() = 0;
-    template <uint8_t k>
-    virtual int8_t SendFeedback(void* param_data) = 0;
-    
-    Vector<(int8_t)(*)()> rest_routine_list_;
+    virtual bool InitComponent();
     
 protected:
     // error management
@@ -60,9 +60,29 @@ protected:
     //bool module_priority_value_has_set_;
     uint8_t* priority_order_;
     BaseModule** module_dependencies_;
+    
+    // time-based process control
+    long* timings_;
+    
+    // condition-based process control
+    CF** conditioning_functors_;
+    
+    // test routine functions
+    Vector<(int8_t)(*)()> test_routine_list_;
+    
 private:
     
     
+};
+
+// Conditioning functor
+struct CF{
+    virtual bool operator()();
+};
+
+// Process conditioning functor
+struct PCF : public CF{
+    bool operator()();
 };
 
 #endif /* BASEMODULE_H */
