@@ -52,6 +52,16 @@ private:
     double calculation_requirement_;// percent-base time requirement
     Command** command_list_;// computed actuator instructions
     uint8_t atomic_trajectory_limit_;
+    bool trajectory_generation_mode_;// true:less exec. time; false:less consumption
+    double ax_acc_step_;// strict axial acceleration step
+    double an_acc_step_;// strict angular acceleration step
+    
+    ActuatorDriver** actuator_drivers_;
+    Vector<double>* error_thresholds_;// target difference toleration
+    double current_max_torque_;
+    uint64_t current_spin_up_of_unit_deg_inc_;
+    double current_maximal_thrust_;
+    uint64_t trajectory_execution_time_limit_;
     
     
     Matrix<double>* translation_matrix_;
@@ -76,13 +86,19 @@ private:
     bool discretization_sampling_mode_;
     long actuator_time_sampling_rate_;
     uint64_t actuator_dist_sampling_rate_;
-    Vector<double>* metric_position_upper_bounds_;
-    Vector<double>* metric_position_lower_bounds_;
-    Vector<double>* metric_speed_upper_bounds_;
-    Vector<double>* metric_speed_lower_bounds_;
-    Vector<double>* metric_accel_upper_bounds_;
-    Vector<double>* metric_accel_lower_bounds_;
-    Vector<double>* pos_traj_exec_err_bounds_;
+    Vector<double>* met_pos_up_bnds_;// metric position upper bounds
+    Vector<double>* met_pos_lo_bnds_;// metric position lower bounds
+    Vector<double>* met_spd_up_bnds_;// metric speed upper bounds
+    Vector<double>* met_spd_lo_bnds_;// metric speed lower bounds
+    Vector<double>* met_acc_up_bnds_;// metric acceleration upper bounds
+    Vector<double>* met_acc_lo_bnds_;// metric acceleration lower bounds
+    Vector<double>* ang_pos_up_bnds_;// angular position upper bounds
+    Vector<double>* ang_pos_lo_bnds_;// angular position lower bounds
+    Vector<double>* ang_spd_up_bnds_;// angular speed upper bounds
+    Vector<double>* ang_spd_lo_bnds_;// angular speed lower bounds
+    Vector<double>* ang_acc_up_bnds_;// angular acceleration upper bounds
+    Vector<double>* ang_acc_lo_bnds_;// angular acceleration lower bounds
+    Vector<double>* pos_traj_exec_err_bounds_;// position trajectory execution error bounds
 };
 
 #endif /* MECHANICALMODEL_H */
