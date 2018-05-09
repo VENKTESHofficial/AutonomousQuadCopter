@@ -206,8 +206,10 @@ struct VehicleParameter{
     long metric_point_area_comm_timeout_;
     
     struct MechanicalParams{
-        double vehicle_weight_;
+        bool trajectory_generation_mode_;
+        Vector<double>* error_thresholds_;
         
+        double vehicle_weight_;
         Vector<double>** external_forces_;
         Vector<double>** internal_forces_;
         bool discretization_sampling_mode_;// time or equidistance-based

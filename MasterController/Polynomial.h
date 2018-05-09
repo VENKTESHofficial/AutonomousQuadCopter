@@ -64,7 +64,6 @@ private:
     // according to number of dimensions
     Vector<X>* interval_beginings_;//Vector<X>(dim_ - 1)
     Vector<X>* interval_endings_;
-    
 };
 template class Polynomial<double>;
 // problem: 
